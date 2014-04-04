@@ -33,8 +33,8 @@ class Navigation_current
 		targetNavi: '.global-navigation'
 		currentParent: 'ul'
 		currentTarget: 'li'
-		currentDirectClass: '.current-direct'
-		currentParentClass: '.current'
+		currentDirectClass: 'current-direct'
+		currentParentClass: 'current'
 		indexNum: 1
 
 	constructor: (options) ->
@@ -68,7 +68,6 @@ class Navigation_current
 		@classTarget.each (index, element) =>
 			targetElements = $(element)
 			@hasUrl = targetElements.find('a').attr('href')
-			console.log(@urlArray[@indexNum - 1])
 			if @urlArray[@indexNum - 1] is @hasUrl
 				targetElements.addClass(@currentDirectClass)
 				targetElements.parents(@currentTarget).each (index, element) =>
@@ -76,5 +75,5 @@ class Navigation_current
 					for n in [0..@indexNum]
 						if @urlArray[@indexNum-1] is @hasUrl
 							elements.addClass(@currentParentClass)
-		$(@currentParentClass).children(@currentParent).children(@currentTarget).show()
+		$('.'+@currentParentClass).children(@currentParent).children(@currentTarget).show()
 		return

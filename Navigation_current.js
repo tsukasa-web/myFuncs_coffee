@@ -42,8 +42,8 @@ localSet = new Navigation_current(localnaviOptions)
       targetNavi: '.global-navigation',
       currentParent: 'ul',
       currentTarget: 'li',
-      currentDirectClass: '.current-direct',
-      currentParentClass: '.current',
+      currentDirectClass: 'current-direct',
+      currentParentClass: 'current',
       indexNum: 1
     };
 
@@ -84,7 +84,6 @@ localSet = new Navigation_current(localnaviOptions)
         var targetElements;
         targetElements = $(element);
         _this.hasUrl = targetElements.find('a').attr('href');
-        console.log(_this.urlArray[_this.indexNum - 1]);
         if (_this.urlArray[_this.indexNum - 1] === _this.hasUrl) {
           targetElements.addClass(_this.currentDirectClass);
           return targetElements.parents(_this.currentTarget).each(function(index, element) {
@@ -102,7 +101,7 @@ localSet = new Navigation_current(localnaviOptions)
           });
         }
       });
-      $(this.currentParentClass).children(this.currentParent).children(this.currentTarget).show();
+      $('.' + this.currentParentClass).children(this.currentParent).children(this.currentTarget).show();
     };
 
     return Navigation_current;
