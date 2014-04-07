@@ -50,8 +50,6 @@ localSet = new Navigation_current(localnaviOptions)
     function Navigation_current(options) {
       this.options = $.extend({}, this.defaults, options);
       this.url = window.location.pathname;
-      this.urlArray = [];
-      this.urlString = new String();
       this.targetNavi = this.options.targetNavi;
       this.currentParent = this.options.currentParent;
       this.currentTarget = this.options.currentTarget;
@@ -59,23 +57,33 @@ localSet = new Navigation_current(localnaviOptions)
       this.currentDirectClass = this.options.currentDirectClass;
       this.currentParentClass = this.options.currentParentClass;
       this.indexNum = this.options.indexNum;
-      this._urlSpilt();
+      this.nowindexNum;
+      this.urlArray = this._urlSpilt();
       this.classTarget.find(this.currentTarget).hide();
       this._currentAdd();
     }
 
     Navigation_current.prototype._urlSpilt = function() {
-      var i, n, _i, _j, _ref;
+      var i, n, urlArray, urlString, _i, _j, _ref;
+      urlArray = [];
+      urlString = new String();
       for (n = _i = 1, _ref = this.indexNum; 1 <= _ref ? _i <= _ref : _i >= _ref; n = 1 <= _ref ? ++_i : --_i) {
         for (i = _j = 1; 1 <= n ? _j <= n : _j >= n; i = 1 <= n ? ++_j : --_j) {
-          this.urlString += '/' + this.url.split('/')[i];
+          if (this.url.split('/')[i] !== '' && this.url.split('/')[i] !== void 0) {
+            urlString += '/' + this.url.split('/')[i];
+          }
         }
-        if (this.url.split('/')[i] !== void 0) {
-          this.urlString += '/';
+        if (this.url.split('/')[n] !== '' && this.url.split('/')[n] !== void 0) {
+          urlString += '/';
+          urlArray.push(urlString);
+          urlString = "";
         }
-        this.urlArray.push(this.urlString);
-        this.urlString = "";
       }
+      this.nowindexNum = urlArray.length;
+      if (this.nowindexNum < this.indexNum) {
+        this.indexNum = this.nowindexNum;
+      }
+      return urlArray;
     };
 
     Navigation_current.prototype._currentAdd = function() {
@@ -86,6 +94,7 @@ localSet = new Navigation_current(localnaviOptions)
         _this.hasUrl = targetElements.find('a').attr('href');
         if (_this.urlArray[_this.indexNum - 1] === _this.hasUrl) {
           targetElements.addClass(_this.currentDirectClass);
+          targetElements.children(_this.currentParent).children(_this.currentTarget).show();
           return targetElements.parents(_this.currentTarget).each(function(index, element) {
             var elements, n, _i, _ref, _results;
             elements = $(element);

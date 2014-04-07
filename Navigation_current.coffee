@@ -40,8 +40,6 @@ class Navigation_current
 	constructor: (options) ->
 		@options = $.extend {}, @defaults, options
 		@url = window.location.pathname
-		@urlArray = []
-		@urlString = new String()
 		@targetNavi = @options.targetNavi
 		@currentParent  = @options.currentParent
 		@currentTarget = @options.currentTarget
@@ -49,20 +47,27 @@ class Navigation_current
 		@currentDirectClass = @options.currentDirectClass
 		@currentParentClass = @options.currentParentClass
 		@indexNum = @options.indexNum
+		@nowindexNum
 
-		@_urlSpilt()
+		@urlArray = @_urlSpilt()
 		@classTarget.find(@currentTarget).hide()
 		@_currentAdd()
 
 	_urlSpilt: ->
+		urlArray = []
+		urlString = new String()
 		for n in [1..@indexNum]
 			for i in [1..n]
-				@urlString += '/' + @url.split('/')[i]
-			if @url.split('/')[i] isnt undefined
-				@urlString += '/'
-			@urlArray.push(@urlString)
-			@urlString = ""
-		return
+				if @url.split('/')[i] isnt '' and @url.split('/')[i] isnt undefined
+					urlString += '/' + @url.split('/')[i]
+			if @url.split('/')[n] isnt '' and @url.split('/')[n] isnt undefined
+				urlString += '/'
+				urlArray.push(urlString)
+				urlString = ""
+		@nowindexNum = urlArray.length
+		if @nowindexNum < @indexNum
+			@indexNum = @nowindexNum
+		return urlArray
 
 	_currentAdd: ->
 		@classTarget.each (index, element) =>
@@ -70,6 +75,7 @@ class Navigation_current
 			@hasUrl = targetElements.find('a').attr('href')
 			if @urlArray[@indexNum - 1] is @hasUrl
 				targetElements.addClass(@currentDirectClass)
+				targetElements.children(@currentParent).children(@currentTarget).show()
 				targetElements.parents(@currentTarget).each (index, element) =>
 					elements = $(element)
 					for n in [0..@indexNum]
