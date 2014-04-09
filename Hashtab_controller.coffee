@@ -37,12 +37,15 @@ class Hashtab_controller
 		@firstCorrespond = false
 
 		@_tabInit()
+		###hashイベントの登録###
 		window.onhashchange = @_onhashChange
 
 	_tabInit: ->
+		###各タブのURLを格納###
 		for n in [0..@tabLength]
 			@indexArray.push(@targetTablist.eq(n).attr('href'))
 
+		###初期表示調整###
 		@firstIndex = window.location.hash
 		if $.inArray(@firstIndex, @indexArray) isnt -1
 			@_tabChange(@firstIndex)
@@ -50,12 +53,14 @@ class Hashtab_controller
 			@_tabChange(@indexArray[0])
 		return
 
+	###hashChange時のイベント###
 	_onhashChange: =>
 		@ChangedIndex = window.location.hash
 		if $.inArray(@ChangedIndex, @indexArray) isnt -1
 			@_tabChange(@ChangedIndex)
 		return
 
+	###tabの切り替え###
 	_tabChange: (targetIndex) ->
 		@targetTablist.each ->
 			if targetIndex is $(this).attr('href')
@@ -71,6 +76,7 @@ class Hashtab_controller
 			return
 		return
 
+	###アニメーション設定###
 	_animationFadein: (target) ->
 		if @options.animation
 			target.fadeIn(@options.animSpeed)

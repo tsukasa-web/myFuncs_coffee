@@ -40,6 +40,7 @@ class Img_rollover
 				@_eventify(@targetParent, @targetImage, srcs.src_off, srcs.src_on)
 			return
 
+	###ステータスの設定###
 	_prepareSrcs : (targetImage) ->
 		src_off = targetImage.attr 'src'
 		src =
@@ -47,10 +48,12 @@ class Img_rollover
 			src_on : src_off.replace @normalState, @hoverState
 		return src
 
+	###プリロード###
 	_preload: (src_on) ->
 		$('<img />').attr 'src', src_on
 		return
 
+	###イベントの設定###
 	_eventify: (targetParent, targetImage, src_off, src_on) ->
 		targetParent.on 'mouseenter focus', => @_toOver(targetImage, src_on)
 		targetParent.on 'mouseleave blur', => @_toNormal(targetImage, src_off)

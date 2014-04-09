@@ -53,6 +53,10 @@ imgHover = new Img_rollover(hovertOptions)
       });
     }
 
+    /*ステータスの設定
+    */
+
+
     Img_rollover.prototype._prepareSrcs = function(targetImage) {
       var src, src_off;
       src_off = targetImage.attr('src');
@@ -63,9 +67,17 @@ imgHover = new Img_rollover(hovertOptions)
       return src;
     };
 
+    /*プリロード
+    */
+
+
     Img_rollover.prototype._preload = function(src_on) {
       $('<img />').attr('src', src_on);
     };
+
+    /*イベントの設定
+    */
+
 
     Img_rollover.prototype._eventify = function(targetParent, targetImage, src_off, src_on) {
       var _this = this;

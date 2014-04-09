@@ -51,14 +51,23 @@ if tabOptions.targetContainer.length
       this.indexArray = [];
       this.firstCorrespond = false;
       this._tabInit();
+      /*hashイベントの登録
+      */
+
       window.onhashchange = this._onhashChange;
     }
 
     Hashtab_controller.prototype._tabInit = function() {
+      /*各タブのURLを格納
+      */
+
       var n, _i, _ref;
       for (n = _i = 0, _ref = this.tabLength; 0 <= _ref ? _i <= _ref : _i >= _ref; n = 0 <= _ref ? ++_i : --_i) {
         this.indexArray.push(this.targetTablist.eq(n).attr('href'));
       }
+      /*初期表示調整
+      */
+
       this.firstIndex = window.location.hash;
       if ($.inArray(this.firstIndex, this.indexArray) !== -1) {
         this._tabChange(this.firstIndex);
@@ -67,12 +76,20 @@ if tabOptions.targetContainer.length
       }
     };
 
+    /*hashChange時のイベント
+    */
+
+
     Hashtab_controller.prototype._onhashChange = function() {
       this.ChangedIndex = window.location.hash;
       if ($.inArray(this.ChangedIndex, this.indexArray) !== -1) {
         this._tabChange(this.ChangedIndex);
       }
     };
+
+    /*tabの切り替え
+    */
+
 
     Hashtab_controller.prototype._tabChange = function(targetIndex) {
       var _this = this;
@@ -91,6 +108,10 @@ if tabOptions.targetContainer.length
         }
       });
     };
+
+    /*アニメーション設定
+    */
+
 
     Hashtab_controller.prototype._animationFadein = function(target) {
       if (this.options.animation) {
