@@ -1,9 +1,10 @@
 ###
-高さ揃え
+RWD対応高さ揃え
 ------------------------------------
 target…グループの親要素
 targetChildren…高さを揃えたい要素
 columns…高さを揃えたい1グループあたりの要素数（デフォルトはtarget内のtargetChildrenの数）
+breakPointTarget…高さ揃えを消去する条件
 ------------------------------------
 
 【使用例】
@@ -11,17 +12,18 @@ columns…高さを揃えたい1グループあたりの要素数（デフォル
 layout3col02 = $('.col-03-02')
 layout3col03 = $('.col-03-03')
 layout4col01 = $('.col-04-01')
+breakPointTarget = $('hogehoge').is(':visible')
 $(window).load ->
 	if layout3col02.length and $('.box-03').length
-		heightEqualizer layout3col02, '.box-03'
+		heightEqualizer layout3col02, '.box-03', breakPointTarget
 	if layout3col03.length
-		heightEqualizer layout3col03, '.segment'
+		heightEqualizer layout3col03, '.segment', breakPointTarget
 	if layout4col01.length
-		heightEqualizer layout4col01, '.segment', 3
+		heightEqualizer layout4col01, '.segment', breakPointTarget
 	return
 
 ###
-heightEqualizer = (target, targetChildren, columns) ->
+RWDheightEqualizer = (target, targetChildren, columns, breakPointTarget) ->
 	equalizeFunc = ->
 		$(target).each ->
 			count = 0
@@ -46,10 +48,15 @@ heightEqualizer = (target, targetChildren, columns) ->
 		return
 
 
-	#ウインドウリサイズ時に再計算
+	#ウインドウリサイズ時にspサイズ時は付加スタイル消去、他は再度リサイズ
 	$(window).resize ->
-		equalizeFunc()
+		if not breakPointTarget
+			equalizeFunc()
+		else
+			$(target).find(targetChildren).removeAttr "style"
+		return
 
 	#最初に一回高さ揃えを行う
-	equalizeFunc()
+	if not breakPointTarget
+		equalizeFunc()
 	return
