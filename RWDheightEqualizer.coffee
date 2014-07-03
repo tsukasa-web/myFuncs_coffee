@@ -4,7 +4,7 @@ RWD対応高さ揃え
 target…グループの親要素
 targetChildren…高さを揃えたい要素
 columns…高さを揃えたい1グループあたりの要素数（デフォルトはtarget内のtargetChildrenの数）
-breakPointTarget…高さ揃えを消去する条件
+breakPointTarget…高さ揃えを消去する条件（特に無い場合はflaseを渡してください）
 ------------------------------------
 
 【使用例】
