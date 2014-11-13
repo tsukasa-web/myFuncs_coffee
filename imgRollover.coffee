@@ -1,3 +1,4 @@
+$ = require 'jquery' # bower経由
 ###
 ロールオーバー
 ------------------------------------
@@ -7,17 +8,20 @@ hoverState…ロールオーバー後の画像の接尾辞
 currentClass…ロールオーバーイベントを起こしたくない際に付加するクラス（グロナビのカレント等）
 
 【使用例】
-#ロールオーバー設定
- hovertOptions =
-    element: $('.roll')
+ImgRollover = require('ImgRollover');
+hovertOptions =
+	element: $('.roll')
 	normalState: '_normal'
 	hoverState: '_hover'
-    currentClass: 'now'
-imgHover = new Img_rollover(hovertOptions)
+	currentClass: 'now'
+imgHover = new ImgRollover(hovertOptions)
 
 ------------------------------------
 ###
-class Img_rollover
+
+#require()で返されるオブジェクト
+module.exports = class ImgRollover
+#class ImgRollover
 	defaults:
 		element: $('a')
 		normalState: '_o'

@@ -13,17 +13,17 @@ extensionに取得したいファイル形式を配列で格納します。
 テキストを挿入したい各種ファイルをリンクしているaタグ（jQueryオブジェクト）を指定します。defaultは$('a')になってます。
 挿入するテキストのテンプレ内容をいじりたい時は#{@_convUnit(size)}部分を修正してください。
 
-filesizeGet = require('filesizeOption');
+FileSizeGetter = require('FileSizeGetter');
 filesizeOption =
   target: $('.size-show')
 	extension: ['.pdf']
-filesizeGet = new Filesize_expression(filesizeOption)
+filesizeGet = new FileSizeGetter(filesizeOption)
 filesizeGet.init()
 ###
 
 #require()で返されるオブジェクト
-module.exports = class CanvasMovieSpritter
-#class fileSizeGetter
+module.exports = class FileSizeGetter
+#class FileSizeGetter
 	defaults :
 		target : $('a')
 		###サイズを取得する対象の拡張子###

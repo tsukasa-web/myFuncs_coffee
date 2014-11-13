@@ -1,3 +1,4 @@
+$ = require 'jquery' # bower経由
 ###
 hashChange対応タブ生成
 ------------------------------------
@@ -10,15 +11,18 @@ animSpeed…アニメーションスピード（デフォルトは500ms）
 ------------------------------------
 
 【使用例】
-#タブコンテンツ生成
+HashtabController = require('HashtabController');
 tabOptions =
 	targetContainer: '#tab-container-01'
 	targetTablist: '.list-tab-01'
 if tabOptions.targetContainer.length
-	tabCreate = new Hashtab_controller(tabOptions)
+	tabCreate = new HashtabController(tabOptions)
 
 ###
-class Hashtab_controller
+
+#require()で返されるオブジェクト
+module.exports = class HashtabController
+#class HashtabController
 	###デフォルトオプション###
 	defaults:
 		targetContainer: '#tab-container'

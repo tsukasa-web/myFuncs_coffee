@@ -1,3 +1,4 @@
+$ = require 'jquery' # bower経由
 ###
 ナビゲーションカレント設定
 ------------------------------------
@@ -10,7 +11,7 @@ indexNum…ナビゲーションの階層数（グロナビだと1に相当・�
 ------------------------------------
 
 【使用例】
-#ナビゲーションカレント
+NavigationCurrent = require('NavigationCurrent');
 globalnaviOptions =
 	targetNavi: '.global-list'
 	currentParent: 'ul'
@@ -23,11 +24,14 @@ localnaviOptions =
     currentDirectClass: '.now'
 	currentParentClass: '.now-parent'
 	indexNum: 3
-globalSet = new Navigation_current(globalnaviOptions)
-localSet = new Navigation_current(localnaviOptions)
+globalSet = new NavigationCurrent(globalnaviOptions)
+localSet = new NavigationCurrent(localnaviOptions)
 
 ###
-class Navigation_current
+
+#require()で返されるオブジェクト
+module.exports = class NavigationCurrent
+#class NavigationCurrent
 	###デフォルトオプション###
 	defaults :
 		targetNavi: '.global-navigation'

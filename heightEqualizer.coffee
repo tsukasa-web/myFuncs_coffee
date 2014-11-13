@@ -9,24 +9,29 @@ columns…高さを揃えたい1グループあたりの要素数（デフォル
 ------------------------------------
 
 【使用例】
-heightEqualizer = require('heightEqualizer');
+HeightEqualizer = require('HeightEqualizer');
 $(window).load ->
 	if $('.col-03-02').length and $('.box-03').length
-		heightEqualize = new heightEqualizer($('.col-03-02'),$('.box-03'), 3)
+		heightEqualize = new HeightEqualizer($('.col-03-02'),$('.box-03'), 3)
+  	heightEqualize.init() #リサイズを発火した上でリサイズイベントをonで登録
   	heightEqualize.equalize() #リサイズ
-  	heightEqualize.resizeOn() #リサイズをonで登録
-  	heightEqualize.resizeOff() #リサイズをoffで解除
+  	heightEqualize.resizeOn() #リサイズイベントをonで登録
+  	heightEqualize.resizeOff() #リサイズイベントをoffで解除
 	return
 ###
 
 #require()で返されるオブジェクト
-module.exports = class heightEqualizer
-#class heightEqualizer
+module.exports = class HeightEqualizer
+#class HeightEqualizer
 	constructor : ($target, $targetChildren, columns) ->
 		@target = $target
 		@targetChildren = $targetChildren
 		@columNum = columns
 		return
+
+	init : ->
+		@equalize()
+		@resizeOn()
 
 	equalize : ->
 		@target.each ->
