@@ -1,3 +1,5 @@
+$ = require 'jquery' # bower経由
+
 ###
 高さ揃え
 ------------------------------------
@@ -7,49 +9,53 @@ columns…高さを揃えたい1グループあたりの要素数（デフォル
 ------------------------------------
 
 【使用例】
-#高さ揃え
-layout3col02 = $('.col-03-02')
-layout3col03 = $('.col-03-03')
-layout4col01 = $('.col-04-01')
+heightEqualizer = require('heightEqualizer');
 $(window).load ->
-	if layout3col02.length and $('.box-03').length
-		heightEqualizer layout3col02, '.box-03'
-	if layout3col03.length
-		heightEqualizer layout3col03, '.segment'
-	if layout4col01.length
-		heightEqualizer layout4col01, '.segment', 3
+	if $('.col-03-02').length and $('.box-03').length
+		heightEqualize = new heightEqualizer($('.col-03-02'),$('.box-03'), 3)
+  	heightEqualize.equalize() #リサイズ
+  	heightEqualize.resizeOn() #リサイズをonで登録
+  	heightEqualize.resizeOff() #リサイズをoffで解除
 	return
-
 ###
-heightEqualizer = (target, targetChildren, columns) ->
-	equalizeFunc = ->
-		$(target).each ->
+
+#require()で返されるオブジェクト
+module.exports = class heightEqualizer
+#class heightEqualizer
+	constructor : ($target, $targetChildren, columns) ->
+		@target = $target
+		@targetChildren = $targetChildren
+		@columNum = columns
+		return
+
+	equalize : ->
+		@target.each ->
 			count = 0
 			maxHeight = 0
 			childs = []
-			equalizeTarget = $(this).find(targetChildren)
+			equalizeTarget = @.find(@targetChildren[0])
 			last = equalizeTarget.length - 1
 			if last > 0
 				#columnが無い時（null）
-				columns = equalizeTarget.length  if columns is undefined
+				@columNum = equalizeTarget.length  if @columNum is undefined
 
 				#ウインドウリサイズ時を想定して一度付加スタイルをリセットしています
-				equalizeTarget.each (i) ->
-					count = i % columns
-					childs[count] = $(this)
-					$(this).removeAttr "style"
+				equalizeTarget.each (index, element) =>
+					count = index % @columNum
+					childs[count] = $(element)
+					$(element).removeAttr "style"
 					maxHeight = $(this).height()  if count is 0 or $(this).height() > maxHeight
-					if i is last or count is columns - 1
+					if index is last or count is columns - 1
 						$.each childs, (i, t) ->
 							t.height maxHeight
+							return
 					return
 		return
 
+	resizeOn : ->
+		$(window).on 'resize', ()=> @equalizeFunc()
+		return
 
-	#ウインドウリサイズ時に再計算
-	$(window).resize ->
-		equalizeFunc()
-
-	#最初に一回高さ揃えを行う
-	equalizeFunc()
-	return
+	resizeOff : ->
+		$(window).off 'resize', ()=> @equalizeFunc()
+		return

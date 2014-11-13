@@ -36,6 +36,7 @@ module.exports = class CanvasMovieSpritter
 		@elements = @options.target
 		@len = @elements.length
 		@len2 = @extension.length
+		return
 
 	init : ->
 		for i in [0..@len]
@@ -49,6 +50,7 @@ module.exports = class CanvasMovieSpritter
 					if size
 						@elements[i].innerHTML += "[#{@_convUnit(size)}]"
 					break
+		return
 
 	###ファイルサイズを取得する###
 	_getFileSize : (href) ->
