@@ -217,4 +217,5 @@ pip-log.txt
 node_modules/
 temp/
 .idea
-
+*.js
+*.map

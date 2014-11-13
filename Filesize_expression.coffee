@@ -1,27 +1,39 @@
+$ = require 'jquery' # bower経由
+
 ###
-ファイルサイズ取得
-------------------------------------
-extension…取得したいファイル形式配列
-------------------------------------
+fileSizeGetter module.ver
+---------------------------------
+aタグでリンクされたfileのサイズをテキストとして挿入するjQuery依存モジュール
+
 fork from filesizeGetter
 http://mashimonator.weblike.jp/storage/library/20091118_001/demo/fileSizeGetter/js/fileSizeGetter.js
-
+---------------------------------
 【使用例】
-#ファイルサイズ取得
+extensionに取得したいファイル形式を配列で格納します。
+テキストを挿入したい各種ファイルをリンクしているaタグ（jQueryオブジェクト）を指定します。defaultは$('a')になってます。
+挿入するテキストのテンプレ内容をいじりたい時は#{@_convUnit(size)}部分を修正してください。
+
+filesizeGet = require('filesizeOption');
 filesizeOption =
+  target: $('.size-show')
 	extension: ['.pdf']
 filesizeGet = new Filesize_expression(filesizeOption)
+filesizeGet.init()
 ###
-class Filesize_expression
+
+#require()で返されるオブジェクト
+module.exports = class CanvasMovieSpritter
+#class fileSizeGetter
 	defaults :
+		target : $('a')
 		###サイズを取得する対象の拡張子###
 		extension : [ '.png', '.gif', '.jpg', '.jpeg', '.pdf', '.xlsx', '.xls', '.docx', '.doc', '.pptx', '.ppt', '.zip', '.lzh', '.cab', '.txt', '.exe' ]
 
-	###初期処理###
-	constructor : (options) ->
+	###サイズ記入処理###
+	init : (options) ->
 		@options = $.extend {}, @defaults, options
 		@extension = @options.extension
-		@elements = $('a')
+		@elements = @options.target
 		@len = @elements.length
 		@len2 = @extension.length
 		for i in [0..@len]
@@ -48,16 +60,19 @@ class Filesize_expression
 			httpObj.send null
 		catch error
 			###404 Not Found###
+			console.log('404 Not Found ' + href)
 			return false
 		###結果を取得###
 		if !httpObj.getResponseHeader 'Content-Length'
 			###No Content-Length###
+			console.log('No Content Length ' + href)
 			return false
 		else
 			###Return Content-Length###
 			if httpObj.readyState is 4 and httpObj.status is 200
 				return httpObj.getResponseHeader 'Content-Length'
 			else
+				console.log('No Content Length ' + href)
 				return false
 
 	###単位を変換する###
