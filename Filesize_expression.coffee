@@ -30,12 +30,14 @@ module.exports = class CanvasMovieSpritter
 		extension : [ '.png', '.gif', '.jpg', '.jpeg', '.pdf', '.xlsx', '.xls', '.docx', '.doc', '.pptx', '.ppt', '.zip', '.lzh', '.cab', '.txt', '.exe' ]
 
 	###サイズ記入処理###
-	init : (options) ->
+	constructor : (options) ->
 		@options = $.extend {}, @defaults, options
 		@extension = @options.extension
 		@elements = @options.target
 		@len = @elements.length
 		@len2 = @extension.length
+
+	init : ->
 		for i in [0..@len]
 			for x in [0..@len2]
 				href = @elements.eq(i).attr('href')
