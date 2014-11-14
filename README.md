@@ -13,6 +13,8 @@ coffeeモジュール集（jQuery）
 - HeightEqualizer　…　高さ揃え
 - ImgRollover　…　ロールオーバー
 - NavigationCurrent　…　ナビゲーションのカレント
+- RAFhandler　…　RAFの設定
+- RAFeasingHandler　…　RAFによるイージングの分割パラメータ操作
 
 ##License
 
