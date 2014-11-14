@@ -26,10 +26,10 @@ module.exports = class FileSizeGetter
 #class FileSizeGetter
 	defaults :
 		target : $('a')
-		###サイズを取得する対象の拡張子###
+		#サイズを取得する対象の拡張子
 		extension : [ '.png', '.gif', '.jpg', '.jpeg', '.pdf', '.xlsx', '.xls', '.docx', '.doc', '.pptx', '.ppt', '.zip', '.lzh', '.cab', '.txt', '.exe' ]
 
-	###サイズ記入処理###
+	#サイズ記入処理
 	constructor : (options) ->
 		@options = $.extend {}, @defaults, options
 		@extension = @options.extension
@@ -44,60 +44,60 @@ module.exports = class FileSizeGetter
 				href = @elements.eq(i).attr('href')
 				reg = new RegExp @extension[x] + '$', 'i'
 				if href and href.match reg
-					###サイズ取得###
+					#サイズ取得
 					size = @_getFileSize(href)
-					###サイズを挿入###
+					#サイズを挿入
 					if size
 						@elements[i].innerHTML += "[#{@_convUnit(size)}]"
 					break
 		return
 
-	###ファイルサイズを取得する###
+	#ファイルサイズを取得する
 	_getFileSize : (href) ->
-		###HTTP通信用オブジェクト生成###
+		#HTTP通信用オブジェクト生成
 		httpObj = @_createXMLHttpRequest()
 		if !httpObj
 			return false
-		###同期通信###
+		#同期通信
 		httpObj.open 'HEAD', href, false
 		try
 			httpObj.send null
 		catch error
-			###404 Not Found###
+			#404 Not Found
 			console.log('404 Not Found ' + href)
 			return false
-		###結果を取得###
+		#結果を取得
 		if !httpObj.getResponseHeader 'Content-Length'
-			###No Content-Length###
+			#No Content-Length
 			console.log('No Content Length ' + href)
 			return false
 		else
-			###Return Content-Length###
+			#Return Content-Length
 			if httpObj.readyState is 4 and httpObj.status is 200
 				return httpObj.getResponseHeader 'Content-Length'
 			else
 				console.log('No Content Length ' + href)
 				return false
 
-	###単位を変換する###
+	#単位を変換する
 	_convUnit : (num) ->
 		if num > 1073741824
-			###GByte単位変換###
+			#GByte単位変換
 			num = num / (1024*1024*1024)
 			return Math.ceil(num) + 'GB'
 		else if num > 1048576
-			###MByte単位変換###
+			#MByte単位変換
 			num = num / (1024*1024)
 			return Math.ceil(num) + 'MB'
 		else if num > 1024
-			###KByte単位変換###
+			#KByte単位変換
 			num = num / 1024
 			return Math.ceil(num) + 'KB'
 		else
-			###Byteの時###
+			#Byteの時
 			return Math.ceil(num) + 'B'
 
-	###HTTP通信用オブジェクト生成###
+	#HTTP通信用オブジェクト生成
 	_createXMLHttpRequest : ->
 		XMLhttpObject = null
 		try
