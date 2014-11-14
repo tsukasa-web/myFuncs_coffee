@@ -14,7 +14,7 @@ RAFOption =
 	func: hogehoge()
 
 rafHandler = new RAFhandler(RAFOption)
-rafHandler.rafInit() #RAF開始
+rafHandler.rafAdd() #RAF開始
 rafHandler.rafRemove() #RAF停止
 rafHandler.rafFuncChange(fuga()) #RAFの実行関数変更
 ###
@@ -53,9 +53,9 @@ module.exports = class RAFhandler
         (callback,element) ->
           window.clearTimeout(@setTimerId)
 
-  rafInit: =>
+  rafAdd: =>
     @requestId = @requestAnimationFrame(@rafInit)
-    @rafFunction
+    @rafFunction()
 
   rafRemove: ->
     @cancelAnimationFrame(@requestId)
