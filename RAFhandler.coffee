@@ -16,6 +16,7 @@ RAFOption =
 rafHandler = new RAFhandler(RAFOption)
 rafHandler.rafAdd() #RAF開始
 rafHandler.rafRemove() #RAF停止
+rafHandler.rafFPSChange(60) #fps変更
 rafHandler.rafFuncChange(fuga()) #RAFの実行関数変更
 ###
 
@@ -63,6 +64,9 @@ module.exports = class RAFhandler
 
   rafFuncChange: (func)->
     @options.func = func
+
+  rafFPSChange: (fps)->
+    @options.fps = fps
 
   rafFunction: ->
     #RAFのフレーム調整
