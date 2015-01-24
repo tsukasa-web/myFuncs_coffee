@@ -11,7 +11,7 @@ func…実行関数
 RAFhandler = require('RAFhandler');
 RAFOption =
   fps: 30
-	func: hogehoge()
+  func: ()=> @hogehoge()
 
 rafHandler = new RAFhandler(RAFOption)
 rafHandler.rafAdd() #RAF開始
@@ -22,12 +22,12 @@ rafHandler.rafFuncChange(fuga()) #RAFの実行関数変更
 
 #require()で返されるオブジェクト
 module.exports = class RAFhandler
-#class RAFhandler
+  #class RAFhandler
   defaults:
     fps: 60
     func: () -> console.log("RAF working.")
 
-  constructor:->
+  constructor: (options)->
     @options = $.extend {}, @defaults, options
     @requestId = null #RAFに使用するID
     @setTimerId = null #Timeoutに使用するID
@@ -36,26 +36,26 @@ module.exports = class RAFhandler
 
     #RAFの宣言（fallback付）
     @requestAnimationFrame =
-      (window.requestAnimationFrame and window.requestAnimationFrame.bind(window)) or
-        (window.webkitRequestAnimationFrame and window.webkitRequestAnimationFrame.bind(window)) or
-        (window.mozRequestAnimationFrame and window.mozRequestAnimationFrame.bind(window)) or
-        (window.oRequestAnimationFrame and window.oRequestAnimationFrame.bind(window)) or
-        (window.msRequestAnimationFrame and window.msRequestAnimationFrame.bind(window)) or
-        (callback,element) ->
-          @setTimerId = window.setTimeout(callback, 1000 / 60)
+        (window.requestAnimationFrame and window.requestAnimationFrame.bind(window)) or
+            (window.webkitRequestAnimationFrame and window.webkitRequestAnimationFrame.bind(window)) or
+            (window.mozRequestAnimationFrame and window.mozRequestAnimationFrame.bind(window)) or
+            (window.oRequestAnimationFrame and window.oRequestAnimationFrame.bind(window)) or
+            (window.msRequestAnimationFrame and window.msRequestAnimationFrame.bind(window)) or
+            (callback,element) ->
+              @setTimerId = window.setTimeout(callback, 1000 / 60)
 
     #キャンセル用RAFの宣言（fallback付）
     @cancelAnimationFrame =
-      (window.cancelAnimationFrame and window.cancelAnimationFrame.bind(window)) or
-        (window.webkitCancelAnimationFrame and window.webkitCancelAnimationFrame.bind(window)) or
-        (window.mozCancelAnimationFrame and window.mozCancelAnimationFrame.bind(window)) or
-        (window.oCancelAnimationFrame and window.oCancelAnimationFrame.bind(window)) or
-        (window.msCancelAnimationFrame and window.msCancelAnimationFrame.bind(window)) or
-        (callback,element) ->
-          window.clearTimeout(@setTimerId)
+        (window.cancelAnimationFrame and window.cancelAnimationFrame.bind(window)) or
+            (window.webkitCancelAnimationFrame and window.webkitCancelAnimationFrame.bind(window)) or
+            (window.mozCancelAnimationFrame and window.mozCancelAnimationFrame.bind(window)) or
+            (window.oCancelAnimationFrame and window.oCancelAnimationFrame.bind(window)) or
+            (window.msCancelAnimationFrame and window.msCancelAnimationFrame.bind(window)) or
+            (callback,element) ->
+              window.clearTimeout(@setTimerId)
 
   rafAdd: =>
-    @requestId = @requestAnimationFrame(@rafInit)
+    @requestId = @requestAnimationFrame(@rafAdd)
     @rafFunction()
 
   rafRemove: ->
@@ -75,4 +75,4 @@ module.exports = class RAFhandler
     if elapsed > @fpsInterval
       @timeLog = now - (elapsed % @fpsInterval)
 
-      @options.func
+      @options.func()
