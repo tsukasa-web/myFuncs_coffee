@@ -1,3 +1,4 @@
+$ = require 'jquery' # bower経由
 ###
 UA判定
 
