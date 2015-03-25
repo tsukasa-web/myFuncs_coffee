@@ -1,64 +1,75 @@
-$ = require 'jquery' # bower経由
 ###
 UA判定
 
 【使用例】
 UAHandler = require('UAHandler');
 
-UAHandler.UA #UA
-UAHandler.ios #ios ver
+UAHandler.PC
 ###
-
-###
-if.useragent.js v0.9
-info: http://company.miyanavi.net/archives/987
-auther: miyanavi
-licence: MIT
-###
-
-#require()で返されるオブジェクト
-module.exports = UAreturn
 
 UAreturn = ->
-  uaName = 'unknown'
-  userAgent = window.navigator.userAgent.toLowerCase()
-  appVersion = window.navigator.appVersion.toLowerCase()
+  e = null
+  r = navigator.userAgent.toLowerCase()
+  nv = window.navigator
+  t = {
+    isIE : false,
+    isIE6 : false,
+    isIE7 : false,
+    isIE8 : false,
+    isIE9 : false,
+    isLtIE9 : false,
+    isIE11 : false,
+    isIOS : false,
+    isIPhone : false,
+    isIPad : false,
+    isIPhone4 : false,
+    isIPad3 : false,
+    isAndroid : false,
+    isAndroidMobile : false,
+    isChrome : false,
+    isSafari : false,
+    isMozilla : false,
+    isWebkit : false,
+    isOpera : false,
+    isPC : false,
+    isTablet : false,
+    isSmartPhone : false,
+    browser : r,
+    isMac : /mac/i.test(nv['platform']),
+    isWin : /win/i.test(nv['platform'])
+  }
 
-  if userAgent.indexOf('msie') != -1
-    uaName = 'ie'
-  if appVersion.indexOf('msie 6.') != -1
-    uaName = 'ie6'
-  else if appVersion.indexOf('msie 7.') != -1
-    uaName = 'ie7'
-  else if appVersion.indexOf('msie 8.') != -1
-    uaName = 'ie8'
-  else if appVersion.indexOf('msie 9.') != -1
-    uaName = 'ie9'
-  else if appVersion.indexOf('msie 10.') != -1
-    uaName = 'ie10'
-  else if userAgent.indexOf('chrome') != -1
-    uaName = 'chrome'
-  else if userAgent.indexOf('ipad') != -1
-    uaName = 'ipad'
-  else if userAgent.indexOf('ipod') != -1
-    uaName = 'ipod'
-  else if userAgent.indexOf('iphone') != -1
-    uaName = 'iphone'
-    ios = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/)
-    uaName = [parseInt(ios[1], 10), parseInt(ios[2], 10), parseInt(ios[3] || 0, 10)]
-  else if userAgent.indexOf('safari') != -1
-    uaName = 'safari'
-  else if userAgent.indexOf('gecko') != -1
-    uaName = 'gecko'
-  else if userAgent.indexOf('opera') != -1
-    uaName = 'opera'
-  else if userAgent.indexOf('android') != -1
-    uaName = 'android'
-  else if userAgent.indexOf('mobile') != -1
-    uaName = 'mobile'
+  if t.isIE is /msie\s(\d+)/.test r
+    n = RegExp.$1
+    n *= 1
+    t.isIE6 = n is 6
+    t.isIE7 = n is 7
+    t.isIE8 = n is 8
+    t.isIE9 = n is 9
+    t.isLtIE9 = n < 9
+  if t.isIE7 && r.indexOf "trident/4.0" isnt -1
+    t.isIE7 = false
+    t.isIE8 = true
+  if r.indexOf "trident/7.0" isnt -1
+    t.isIE = true
+    t.isIE11 = true
+  if t.isIPhone is /i(phone|pod)/.test r
+    t.isIPhone4 = window.devicePixelRatio is 2
+  if t.isIPad = /ipad/.test r
+    e = window.devicePixelRatio is 2
+  t.isIOS = t.isIPhone or t.isIPad
+  t.isAndroid = /android/.test r
+  t.isAndroidMobile = /android(.+)?mobile/.test r
+  t.isPC = !t.isIOS && !t.isAndroid
+  t.isTablet = t.isIPad or t.isAndroid and t.isAndroidMobile
+  t.isSmartPhone = t.isIPhone or t.isAndroidMobile
+  t.isChrome = /chrome/.test r
+  t.isWebkit = /webkit/.test r
+  t.isOpera = /opera/.test r
+  t.isMozilla = r.indexOf("compatible") < 0 and /mozilla/.test r
+  t.isSafari = !t.isChrome and t.isWebkit
 
-  uaObj =
-    UA: uaName
-    ios: ios
+  return t
 
-  return uaObj
+#require()で返されるオブジェクト
+module.exports = UAreturn()

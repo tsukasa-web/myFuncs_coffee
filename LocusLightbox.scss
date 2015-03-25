@@ -1,0 +1,358 @@
+$ContainerSize: 90%;
+
+$iconCloseSize: 50px;
+$iconCloseLineBold: 1px;
+$iconCloseLineColor: $color-b;
+
+$iconArrowBGcolor: #000;
+$iconArrowSize: 35px;
+$iconArrowLineBold: 1px;
+$iconArrowColor: #FFF;
+$iconArrowColorHover: #F2C13E;
+
+.lightboxOverlay{
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+
+  &.open{
+    @include display(flex);
+    opacity: 1;
+    z-index: 1000;
+
+    @include animation-name(lightbox-fadeIn-anim);
+    @include animation-duration(0.5s);
+    @include animation-timing-function($ease-out-cubic);
+    @include animation-iteration-count(1);
+    @include animation-fill-mode(forwards);
+  }
+
+  &.close{
+    @include animation-name(lightbox-fadeOut-anim);
+    @include animation-duration(0.5s);
+    @include animation-timing-function($ease-out-cubic);
+    @include animation-iteration-count(1);
+    @include animation-fill-mode(forwards);
+  }
+}
+
+.lightboxContainer{
+  display: none;
+  margin: 0 auto;
+  @include align-self(center);
+  opacity: 0;
+  position: relative;
+
+  &.width-rate{
+    width: $ContainerSize;
+    height: auto;
+  }
+  &.height-rate{
+    height: $ContainerSize;
+  }
+
+  &.open{
+    display: block;
+    opacity: 1;
+  }
+
+  &.load-finish{
+    @include animation-name(lightbox-fadeIn-anim);
+    @include animation-duration(0.5s);
+    @include animation-timing-function($ease-out-cubic);
+    @include animation-iteration-count(1);
+    @include animation-fill-mode(forwards);
+  }
+}
+
+.lightboxClose{
+  display: block;
+  width: $iconCloseSize;
+  height: $iconCloseSize;
+  position: absolute;
+  right: 82px;
+  top: 55px;
+  cursor: pointer;
+  z-index: 100;
+
+  .close-line-01,
+  .close-line-02{
+    display: block;
+    width: 100%;
+    height: $iconCloseLineBold;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -$iconCloseLineBold/2;
+  }
+
+  .close-line-01{
+    @include transform(rotate(45deg));
+
+    &:before,
+    &:after{
+      content: '';
+      display: block;
+      width: 50%;
+      height: 100%;
+      position: absolute;
+      background-color: $iconCloseLineColor;
+    }
+
+    &:before{
+      top: 0;
+      left: 0;
+    }
+    &:after{
+      top: 0;
+      right: 0;
+    }
+  }
+
+  .close-line-02{
+    @include transform(rotate(-45deg));
+
+    &:before,
+    &:after{
+      content: '';
+      display: block;
+      width: 35%;
+      height: 100%;
+      position: absolute;
+      background-color: $iconCloseLineColor;
+    }
+
+    &:before{
+      top: 0;
+      left: 0;
+    }
+    &:after{
+      top: 0;
+      right: 0;
+    }
+  }
+}
+
+.lightboxClose-move{
+  top: 0 !important;
+  right: auto !important;
+  left: 0;
+}
+
+.lightboxImg{
+  margin: 0;
+  text-align: center;
+
+  .width-rate &,
+  .width-rate & > img{
+    width: 100%;
+    height: auto;
+  }
+  .height-rate &,
+  .height-rate & > img{
+    height: 100%;
+  }
+
+  &.load-start{
+    @include animation-name(lightbox-fadeOut-anim);
+    @include animation-duration(0.5s);
+    @include animation-timing-function($ease-out-cubic);
+    @include animation-iteration-count(1);
+    @include animation-fill-mode(forwards);
+  }
+  &.load-finish{
+    @include animation-name(lightbox-fadeIn-anim);
+    @include animation-duration(0.5s);
+    @include animation-timing-function($ease-out-cubic);
+    @include animation-iteration-count(1);
+    @include animation-fill-mode(forwards);
+  }
+}
+
+.load-animation{
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  @include transform(translate3d(-50%,-50%,0))
+}
+
+.circle-01,.circle-02,.circle-03{
+  display: block;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -15px 0 0 -15px;
+  border: 1px solid #000;
+  border-radius: 30px;
+  z-index: 2000;
+
+  @include animation-duration(1.5s);
+  @include animation-timing-function($ease-out-cubic);
+  @include animation-iteration-count(infinite);
+  @include animation-fill-mode(forwards);
+}
+
+.circle-01{
+  @include animation-name(lightbox-load-circle-01);
+}
+
+.circle-02{
+  -webkit-transform: scale(0.7);
+  transform: scale(0.7);
+
+  @include animation-name(lightbox-load-circle-02);
+}
+
+.circle-03{
+  -webkit-transform: scale(0.4);
+  transform: scale(0.4);
+
+  @include animation-name(lightbox-load-circle-03);
+}
+
+.lightboxArrowLeft,
+.lightboxArrowRight{
+  display: none;
+  width: $iconArrowSize;
+  height: $iconArrowSize;
+  background-color: $iconArrowBGcolor;
+  position: absolute;
+  cursor: pointer;
+  border-radius: $iconArrowSize;
+  top: 50%;
+  margin-top: -$iconArrowSize/2;
+  @include backface-visibility(hidden);
+
+  &:hover{
+    & > .icon-arrow-line-01,
+    & > .icon-arrow-line-02 {
+      background-color: $iconArrowColorHover;
+    }
+  }
+
+  & > .icon-arrow-line-01,
+  & > .icon-arrow-line-02{
+    width: 30%;
+    height: $iconArrowLineBold;
+    background-color: $iconArrowColor;
+    position: absolute;
+    left: 35%;
+
+    @include transition-property(background-color);
+    @include transition-duration(1s);
+    @include transition-timing-function($ease-out-expo);
+  }
+
+  & > .icon-arrow-line-01{
+    bottom: 50%;
+    margin-bottom: -10%;
+    @include transform(rotate(-35deg));
+  }
+  & > .icon-arrow-line-02{
+    top: 50%;
+    margin-top: -10%;
+    @include transform(rotate(35deg));
+  }
+}
+
+.lightboxArrowLeft{
+  margin-left: -$iconArrowSize/2;
+  left: (100% - $ContainerSize)/2;
+  @include transform(scaleX(-1));
+}
+
+.lightboxArrowRight{
+  margin-right: -$iconArrowSize/2;
+  right: (100% - $ContainerSize)/2;
+}
+
+/*-------------------------
+lightbox keyframe animation
+-------------------------*/
+
+/* Loading */
+@include keyframes(lightbox-load-circle-01) {
+  0% {
+    transform: scale(1.0);
+  }
+  25% {
+    transform: scale(0.7);
+  }
+  50% {
+    transform: scale(0.4);
+  }
+  75%{
+    transform: scale(0.7);
+  }
+  100%{
+    transform: scale(1.0);
+  }
+}
+
+@include keyframes(lightbox-load-circle-02) {
+  0% {
+    transform: scale(0.7);
+  }
+  25% {
+    transform: scale(0.4);
+  }
+  50% {
+    transform: scale(0.7);
+  }
+  75%{
+    transform: scale(1.0);
+  }
+  100%{
+    transform: scale(0.7);
+  }
+}
+
+@include keyframes(lightbox-load-circle-03) {
+  0% {
+    transform: scale(0.4);
+  }
+  25% {
+    transform: scale(0.7);
+  }
+  50% {
+    transform: scale(1.0);
+  }
+  75%{
+    transform: scale(0.7);
+  }
+  100%{
+    transform: scale(0.4);
+  }
+}
+
+/* fadeIn */
+
+@include keyframes(lightbox-fadeIn-anim) {
+  0% {
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+/* fadeOut */
+
+@include keyframes(lightbox-fadeOut-anim) {
+  0% {
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
+}
