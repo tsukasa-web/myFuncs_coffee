@@ -4,7 +4,8 @@ UA判定
 【使用例】
 UAHandler = require('UAHandler');
 
-UAHandler.PC
+UAHandler.UA #UA
+UAHandler.ios #ios ver
 ###
 
 UAreturn = ->
@@ -39,7 +40,7 @@ UAreturn = ->
     isWin : /win/i.test(nv['platform'])
   }
 
-  if t.isIE is /msie\s(\d+)/.test r
+  if t.isIE = /msie\s(\d+)/.test r
     n = RegExp.$1
     n *= 1
     t.isIE6 = n is 6
@@ -47,13 +48,13 @@ UAreturn = ->
     t.isIE8 = n is 8
     t.isIE9 = n is 9
     t.isLtIE9 = n < 9
-  if t.isIE7 && r.indexOf "trident/4.0" isnt -1
+  if t.isIE7 && r.indexOf("trident/4.0") isnt -1
     t.isIE7 = false
     t.isIE8 = true
-  if r.indexOf "trident/7.0" isnt -1
+  if r.indexOf("trident/7.0") isnt -1
     t.isIE = true
     t.isIE11 = true
-  if t.isIPhone is /i(phone|pod)/.test r
+  if t.isIPhone = /i(phone|pod)/.test r
     t.isIPhone4 = window.devicePixelRatio is 2
   if t.isIPad = /ipad/.test r
     e = window.devicePixelRatio is 2
