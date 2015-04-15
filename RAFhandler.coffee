@@ -55,8 +55,9 @@ module.exports = class RAFhandler
               window.clearTimeout(@setTimerId)
 
   rafAdd: =>
-    @requestId = @requestAnimationFrame(@rafAdd)
-    @rafFunction()
+    if !@requestId
+      @requestId = @requestAnimationFrame(@rafAdd)
+      @rafFunction()
 
   rafRemove: ->
     @cancelAnimationFrame(@requestId)
