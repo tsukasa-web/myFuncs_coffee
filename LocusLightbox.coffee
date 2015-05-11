@@ -217,15 +217,16 @@ module.exports = class LocusLightbox
     @lightboxContainer.removeClass 'height-rate'
     @lightboxContainer.removeClass 'width-rate'
 
+    if @lightboxImg.width() > @lightboxImg.height()
+      @lightboxContainer.addClass 'width-rate'
+    else
+      @lightboxContainer.addClass 'height-rate'
     if @lightboxImg.width() > windotWidth
+      @lightboxContainer.removeClass 'height-rate'
       @lightboxContainer.addClass 'width-rate'
     else if @lightboxImg.height() > windotHeight
+      @lightboxContainer.removeClass 'width-rate'
       @lightboxContainer.addClass 'height-rate'
-    else
-      if @lightboxImg.width() > @lightboxImg.height()
-        @lightboxContainer.addClass 'width-rate'
-      else
-        @lightboxContainer.addClass 'height-rate'
 
   #closeBtn Rollover FadeIn
   closeBtnFadeIn: =>
