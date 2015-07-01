@@ -157,7 +157,7 @@ module.exports = class LocusLightbox
     e.preventDefault()
     @lightboxOverlay.addClass 'close'
 
-    @lightboxOverlay.one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
+    @lightboxOverlay.on 'webkitAnimationEnd oanimationend msAnimationEnd animationend',
       (e) =>
         @lightboxOverlay.removeClass 'open close'
         @lightboxContainer.removeClass 'open load-finish'
@@ -181,7 +181,7 @@ module.exports = class LocusLightbox
             @lightboxNextBtn.off 'mouseleave'
         if @options.resizeRate is 'both'
           @$window.off 'resize.lightbox'
-    )
+        @lightboxOverlay.off 'webkitAnimationEnd oanimationend msAnimationEnd animationend'
 
   loadImg: (targetImg, targetAlbum=false, albumMove=false) ->
     if targetAlbum
@@ -193,11 +193,12 @@ module.exports = class LocusLightbox
       @lightboxLoadicon.fadeOut()
 
       if albumMove
-        @imgContainer.addClass('load-finish')
-        @imgContainer.one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
+        @imgContainer.addClass 'load-finish'
+        @imgContainer.on 'webkitAnimationEnd oanimationend msAnimationEnd animationend',
           (e) =>
             @imgContainer.removeClass 'load-start load-finish'
-        )
+            @imgContainer.off 'webkitAnimationEnd oanimationend msAnimationEnd animationend'
+
       else
         @lightboxContainer.addClass 'load-finish'
 
@@ -212,19 +213,20 @@ module.exports = class LocusLightbox
     preloader.src = targetImg
 
   resizeLightbox: (e) =>
-    windotWidth = @$window.width()
-    windotHeight = @$window.height()
+    windowWidth = @$window.width()
+    windowHeight = @$window.height()
+    windwRate = windowWidth/windowHeight
+    imgWidth = @lightboxImg.width()
+    imgHeight = @lightboxImg.height()
+    imgRate = imgWidth/imgHeight
+
     @lightboxContainer.removeClass 'height-rate'
     @lightboxContainer.removeClass 'width-rate'
 
-    if @lightboxImg.width() > @lightboxImg.height()
-      @lightboxContainer.addClass 'width-rate'
-    else
-      @lightboxContainer.addClass 'height-rate'
-    if @lightboxImg.width() > windotWidth
+    if imgRate > windwRate
       @lightboxContainer.removeClass 'height-rate'
       @lightboxContainer.addClass 'width-rate'
-    else if @lightboxImg.height() > windotHeight
+    else
       @lightboxContainer.removeClass 'width-rate'
       @lightboxContainer.addClass 'height-rate'
 
@@ -248,11 +250,11 @@ module.exports = class LocusLightbox
     @lightboxLoadicon.fadeIn()
     if @nowImgIndex+1 is @album[@nowImgAlbum].length-1
       @lightboxNextBtn.hide()
-    @imgContainer.addClass('load-start')
-    @imgContainer.one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
+    @imgContainer.addClass 'load-start'
+    @imgContainer.on 'webkitAnimationEnd oanimationend msAnimationEnd animationend',
       (e) =>
         @loadImg @album[@nowImgAlbum][@nowImgIndex+1], @nowImgAlbum, true
-    )
+        @imgContainer.off 'webkitAnimationEnd oanimationend msAnimationEnd animationend'
 
   prevImg: (e) =>
     if UA.isPC is true
@@ -262,8 +264,8 @@ module.exports = class LocusLightbox
     @lightboxLoadicon.show()
     if @nowImgIndex-1 is 0
       @lightboxPrevBtn.hide()
-    @imgContainer.addClass('load-start')
-    @imgContainer.one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
+    @imgContainer.addClass 'load-start'
+    @imgContainer.on 'webkitAnimationEnd oanimationend msAnimationEnd animationend',
       (e) =>
         @loadImg @album[@nowImgAlbum][@nowImgIndex-1], @nowImgAlbum, true
-    )
+        @imgContainer.off 'webkitAnimationEnd oanimationend msAnimationEnd animationend'
