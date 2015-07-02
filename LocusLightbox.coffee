@@ -101,13 +101,13 @@ module.exports = class LocusLightbox
       @lightboxPrevBtn.off 'click'
       @lightboxNextBtn.off 'click'
 
-  mouseCloseBtnMove: (e) =>
+  _mouseCloseBtnMove: (e) =>
     e.preventDefault()
-    mouse = @getPagePos(e)
-    @lightboxClosebtn.css @changeTranslate(0,0,mouse.x-@closeIconHalf,mouse.y-@closeIconHalf,0)
+    mouse = @_getPagePos(e)
+    @lightboxClosebtn.css @_changeTranslate(0,0,mouse.x-@closeIconHalf,mouse.y-@closeIconHalf,0)
   #console.log('mouseX = ' + mouse.x + ', mouseY = ' + mouse.y)
 
-  getPagePos: (e) ->
+  _getPagePos: (e) ->
     pos =
       x: 0
       y: 0
@@ -124,7 +124,7 @@ module.exports = class LocusLightbox
     return pos
 
   #transform追加関数
-  changeTranslate: (degX,degY,transX,transY,transZ) ->
+  _changeTranslate: (degX,degY,transX,transY,transZ) ->
     css3 = "rotateX("+degX+"deg) rotateY("+degY+"deg) translateX("+transX+"px) translateY("+transY+"px) translateZ("+transZ+"px)"
 
     return {
@@ -146,21 +146,21 @@ module.exports = class LocusLightbox
     #eventのcurrentTargetがもつdata-large-imgを取得し、ロード関数へ
     targetUrl = $(e.currentTarget).attr @options.targetData
     targetAlbum = $(e.currentTarget).attr('data-album')
-    @loadImg targetUrl, targetAlbum
+    @_loadImg targetUrl, targetAlbum
 
     #MoveCloseBtnAnimation(not iphone and android)
     if UA.isPC is true
-      mouse = @getPagePos(e)
-      @lightboxClosebtn.css @changeTranslate(0, 0, mouse.x-@closeIconHalf, mouse.y-@closeIconHalf, 0)
+      mouse = @_getPagePos(e)
+      @lightboxClosebtn.css @_changeTranslate(0, 0, mouse.x-@closeIconHalf, mouse.y-@closeIconHalf, 0)
       @$window.on 'mousemove.lightbox', _.throttle (e)=>
-        @mouseCloseBtnMove(e)
+        @_mouseCloseBtnMove(e)
       , 10
 
       if @album
-        @lightboxPrevBtn.on 'mouseenter', @closeBtnFadeOut
-        @lightboxNextBtn.on 'mouseenter', @closeBtnFadeOut
-        @lightboxPrevBtn.on 'mouseleave', @closeBtnFadeIn
-        @lightboxNextBtn.on 'mouseleave', @closeBtnFadeIn
+        @lightboxPrevBtn.on 'mouseenter', @_closeBtnFadeOut
+        @lightboxNextBtn.on 'mouseenter', @_closeBtnFadeOut
+        @lightboxPrevBtn.on 'mouseleave', @_closeBtnFadeIn
+        @lightboxNextBtn.on 'mouseleave', @_closeBtnFadeIn
 
   closeLightbox: (e) =>
     e.preventDefault()
@@ -192,7 +192,7 @@ module.exports = class LocusLightbox
           @$window.off 'resize.lightbox'
         @lightboxOverlay.off 'webkitAnimationEnd oanimationend msAnimationEnd animationend'
 
-  loadImg: (targetImg, targetAlbum=false, albumMove=false) ->
+  _loadImg: (targetImg, targetAlbum=false, albumMove=false) ->
     if targetAlbum
       @nowImgAlbum = targetAlbum
       @nowImgIndex = _.indexOf(@album[targetAlbum], targetImg)
@@ -240,14 +240,14 @@ module.exports = class LocusLightbox
       @lightboxContainer.addClass 'height-rate'
 
   #closeBtn Rollover FadeIn
-  closeBtnFadeIn: =>
+  _closeBtnFadeIn: =>
     @lightboxOverlay.on 'click', (e)=>
       e.preventDefault()
       @closeLightbox(e)
     @lightboxClosebtn.fadeIn()
 
   #closeBtn Rollover FadeOut
-  closeBtnFadeOut: =>
+  _closeBtnFadeOut: =>
     @lightboxOverlay.off 'click'
     @lightboxClosebtn.fadeOut()
 
@@ -262,7 +262,7 @@ module.exports = class LocusLightbox
     @imgContainer.addClass 'load-start'
     @imgContainer.on 'webkitAnimationEnd oanimationend msAnimationEnd animationend',
       (e) =>
-        @loadImg @album[@nowImgAlbum][@nowImgIndex+1], @nowImgAlbum, true
+        @_loadImg @album[@nowImgAlbum][@nowImgIndex+1], @nowImgAlbum, true
         @imgContainer.off 'webkitAnimationEnd oanimationend msAnimationEnd animationend'
 
   prevImg: (e) =>
@@ -276,5 +276,5 @@ module.exports = class LocusLightbox
     @imgContainer.addClass 'load-start'
     @imgContainer.on 'webkitAnimationEnd oanimationend msAnimationEnd animationend',
       (e) =>
-        @loadImg @album[@nowImgAlbum][@nowImgIndex-1], @nowImgAlbum, true
+        @_loadImg @album[@nowImgAlbum][@nowImgIndex-1], @nowImgAlbum, true
         @imgContainer.off 'webkitAnimationEnd oanimationend msAnimationEnd animationend'
