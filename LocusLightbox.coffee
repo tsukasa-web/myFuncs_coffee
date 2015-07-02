@@ -92,6 +92,15 @@ module.exports = class LocusLightbox
       @lightboxPrevBtn.on 'click', @prevImg
       @lightboxNextBtn.on 'click', @nextImg
 
+  removeEvent: ->
+    #各種イベントの設定
+    @targetEl.each (id, object) =>
+      $(object).off @EVENTNAME_TOUCHSTART
+    @lightboxOverlay.off @EVENTNAME_TOUCHSTART
+    if @album
+      @lightboxPrevBtn.off 'click'
+      @lightboxNextBtn.off 'click'
+
   mouseCloseBtnMove: (e) =>
     e.preventDefault()
     mouse = @getPagePos(e)
