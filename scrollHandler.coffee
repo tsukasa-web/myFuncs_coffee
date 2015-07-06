@@ -10,44 +10,53 @@ _ = require('underscore')
 
 # require()で返されるオブジェクト
 module.exports = class ScrollHandler
-  constructor : ->
+  constructor : ($scrollTarget, throttletime = 50) ->
+    @scrollTarget = $scrollTarget
+    @throttletime = throttletime
     @$window = $(window)
-    @throttletime = 50
 
-  setShowEvent : ($target, func, id, margin) ->
+  setShowEvent : ($target, func, margin=0, id=null, index=null) ->
     contextObj =
       target: $target
       height: $target.height()
-      position: $target.offset().top
       method: func
       id: id
+      index: index
       margin: margin
-    throttled = _.throttle((=>@showscrollEvent(contextObj)), @throttletime)
-    @$window.on('scroll.'+id+'show', throttled)
+    throttled = _.throttle (=>@showscrollEvent(contextObj)), @throttletime
+    @scrollTarget.on 'scroll.'+id+'show', throttled
 
   showscrollEvent: (contextObj) =>
-    nowScrollPoint = @$window.scrollTop()
+    nowTargetTop = contextObj.target.position().top
     windowHeight = @$window.height()
-    if nowScrollPoint >= contextObj.position - windowHeight + contextObj.margin && nowScrollPoint <= contextObj.position + contextObj.height
+    if nowTargetTop > -contextObj.height and nowTargetTop < windowHeight
       contextObj.method()
 
-  removeShowEvent : (id) ->
-    @$window.off('scroll.'+id+'show')
+  removeShowEvent : (id=null) ->
+    @scrollTarget.off 'scroll.'+id+'show'
 
-  setHideEvent : ($target, func, id) ->
+  setHideEvent : ($target, func, margin=0, id=null, index=null) ->
     contextObj =
       target: $target
       height: $target.height()
-      position: $target.offset().top
+      position: $target.position().top
       method: func
-    throttled = _.throttle((=> @hidescrollEvent(contextObj)), @throttletime)
-    @$window.on('scroll.'+id+'hide', throttled)
+      id: id
+      index: index
+      margin: margin
+    throttled = _.throttle (=> @hidescrollEvent(contextObj)), @throttletime
+    @scrollTarget.on 'scroll.'+id+'hide', throttled
 
   hidescrollEvent: (contextObj)=>
-    nowScrollPoint = @$window.scrollTop()
+    nowTargetTop = contextObj.target.position().top
     windowHeight = @$window.height()
-    if nowScrollPoint < contextObj.position - windowHeight || nowScrollPoint > contextObj.position + contextObj.height
+    if nowTargetTop < -contextObj.height or nowTargetTop > windowHeight
+      console.log nowTargetTop, -contextObj.height, windowHeight
       contextObj.method()
 
-  removeHideEvent : (id) ->
-    @$window.off('scroll.'+id+'hide')
+  removeHideEvent : (id=null) ->
+    @scrollTarget.off 'scroll.'+id+'hide'
+
+  removeAllEvent : (id=null) ->
+    @scrollTarget.off 'scroll.'+id+'hide'
+    @scrollTarget.off 'scroll.'+id+'show'
