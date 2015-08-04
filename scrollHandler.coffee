@@ -29,7 +29,7 @@ module.exports = class ScrollHandler
   showscrollEvent: (contextObj) =>
     nowTargetTop = contextObj.target.position().top
     windowHeight = @$window.height()
-    if nowTargetTop > -contextObj.height and nowTargetTop < windowHeight
+    if nowTargetTop > -contextObj.height + contextObj.margin and nowTargetTop < windowHeight - contextObj.margin
       contextObj.method()
 
   removeShowEvent : (id=null) ->
@@ -50,8 +50,7 @@ module.exports = class ScrollHandler
   hidescrollEvent: (contextObj)=>
     nowTargetTop = contextObj.target.position().top
     windowHeight = @$window.height()
-    if nowTargetTop < -contextObj.height or nowTargetTop > windowHeight
-      console.log nowTargetTop, -contextObj.height, windowHeight
+    if nowTargetTop < -contextObj.height - contextObj.margin or nowTargetTop > windowHeight + contextObj.margin
       contextObj.method()
 
   removeHideEvent : (id=null) ->
